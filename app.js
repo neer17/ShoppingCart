@@ -6,9 +6,15 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var expressHbs = require('express-handlebars')
 var mongoose = require('mongoose')
+var flash = require('connect-flash')
+var passport = require('passport')
 
 mongoose.connect('mongodb://localhost/shopping', {useNewUrlParser: true})
 var indexRouter = require('./routes/index')
+
+//  getting the Passport Strategy  
+require('./config/passport-config')
+
 var app = express()
 
 // view engine setup
@@ -21,7 +27,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser())
 app.use(session({secret: 'mysuperseccret', resave: false, saveUninitialized: false}))
+app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use('/', indexRouter);
 
