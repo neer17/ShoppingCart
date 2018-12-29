@@ -8,8 +8,11 @@ var expressHbs = require('express-handlebars')
 var mongoose = require('mongoose')
 var flash = require('connect-flash')
 var passport = require('passport')
+var validator = require('express-validator')
 
 mongoose.connect('mongodb://localhost/shopping', {useNewUrlParser: true})
+
+//  loading the "index" route
 var indexRouter = require('./routes/index')
 
 //  getting the Passport Strategy  
@@ -24,7 +27,8 @@ app.set('view engine', '.hbs')
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }))
+app.use(validator())
 app.use(cookieParser())
 app.use(session({secret: 'mysuperseccret', resave: false, saveUninitialized: false}))
 app.use(flash())

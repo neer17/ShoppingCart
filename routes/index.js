@@ -27,19 +27,21 @@ router.get('/', function(req, res, next) {
   })
 })
 
-router.get('/users/signup', (req, res, next) => {
-  var message = req.flash('error')
-  res.render('users/signup', {csrfToken: req.csrfToken(), message: message, hasErrors: message.length > 0})
+//  on Request
+router.get('/users/signup', (req, res) => {
+  var messages = req.flash('error')
+  res.render('users/signup', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0})
 })
 
+//  when form is submitted
 router.post('/users/signup', passport.authenticate('local', {
   successRedirect: '/users/profile',
-  failureRedirect: '/users/signup',
+  failureRedirect: '/users/failure',
   failureFlash: true
 }))
 
-router.get('/user/profile', (req, res, next) => {
-  res.render('/users/profile')
+router.get('/users/profile', (req, res) => {
+  res.send('success')
 })
 
 module.exports = router

@@ -3,7 +3,7 @@
         <form action="/users/signup" method="POST">
             <div class="form-group">
                 {{#if hasErrors}}
-                {{#each message}}
+                {{#each messages}}
                 <div class="alert alert-danger">{{this}}</div>
                 {{/each}}
                 {{/if}}
