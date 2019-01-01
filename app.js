@@ -14,6 +14,7 @@ mongoose.connect('mongodb://localhost/shopping', {useNewUrlParser: true})
 
 //  loading the "index" route
 var indexRouter = require('./routes/index')
+var userRouter = require('./routes/user')
 
 //  getting the Passport Strategy  
 require('./config/passport-config')
@@ -25,9 +26,9 @@ app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}))
 // app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', '.hbs')
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(validator())
 app.use(cookieParser())
 app.use(session({secret: 'mysuperseccret', resave: false, saveUninitialized: false}))
@@ -37,7 +38,15 @@ app.use(passport.session())
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', indexRouter);
+//  checking if the user is logged in
+app.use((req, res, next) => {
+  res.locals.isLoggedIn = req.isAuthenticated()
+  next()
+})
+
+app.use('/users', userRouter)
+app.use('/', indexRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

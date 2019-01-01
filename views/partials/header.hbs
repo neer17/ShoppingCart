@@ -1,18 +1,22 @@
 <nav class="navbar navbar-expand-sm bg-light navbar-light justify-content-end">
   <a class="navbar-brand" href="#">Home</a>
-  <div class="btn btn-success ml-auto"><i class="fas fa-user"></i> User</div>
+  <div class="btn btn-success ml-auto"><i class="fas fa-user"></i> Shopping cart</div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
     <ul class="navbar-nav text-right">
       <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fas fa-shopping-cart"></i> Shopping cart
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fas fa-shopping-cart"></i> User
           <span class="caret"></span></button>
         <ul class="dropdown-menu">
-          <li><a href="#">HTML</a></li>
-          <li><a href="#">CSS</a></li>
-          <li><a href="#">JavaScript</a></li>
+          {{# if isLoggedIn }}
+          <li><a href="/users/profile">Profile</a></li>
+          <li><a href="/users/logout">Logout</a></li>
+          {{else}}
+          <li><a href="/users/signin">SignIn</a></li>   
+          <li><a href="/users/signup">SignUp</a></li>
+          {{/if}}
         </ul>
       </div>
 
