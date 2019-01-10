@@ -38,9 +38,18 @@ router.get('/add-to-cart/:id', (req, res) => {
   })
 })
 
-//  shooping cart route
+//  shopping cart route
 router.get('/shopping-cart', (req, res, next) => {
   res.render('shop/shopping_cart', {cart: req.session.cart})
+})
+
+//  checkout route
+router.get('/checkout', (req, res) => {
+  if (!req.session.cart) {
+    return redirect('/shopping-cart')
+  }
+
+  res.render('shop/checkout', {totalPrice: req.session.cart.totalPrice})
 })
 
 module.exports = router
