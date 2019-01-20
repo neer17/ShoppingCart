@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Checkout</title>
+</head>
+
+<body>
+  <div class="row">
+    <div class="col-col-md-12">
+      <form action="/thank-you-page" method="POST">
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button" data-key="pk_test_hdzQpoWMhjp2jtywNWzzEckb"
+          data-amount={{totalPrice}}00 data-name="Shopping cart purchase" data-description="{{totalQty}} games purchased" data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+          data-locale="auto">
+          </script>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

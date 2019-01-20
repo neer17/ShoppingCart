@@ -5,6 +5,12 @@ var passport = require('passport')
 var Product = require('./../models/product')
 var Cart = require('./../models/cart')
 
+//  middleware to render "thank-you-default-layout" as default layout for "thank-you" page
+router.all('shop/thank-you', (req, res, next) => {
+  req.app.locals.layout = 'thank-you-default-layout'
+  next()
+})
+
 /* home page. */
 router.get('/', function (req, res, next) {
   Product.find((err, docs) => {
@@ -46,10 +52,15 @@ router.get('/shopping-cart', (req, res, next) => {
 //  checkout route
 router.get('/checkout', (req, res) => {
   if (!req.session.cart) {
-    return redirect('/shopping-cart')
+    return res.redirect('/shopping-cart')
   }
 
   res.render('shop/checkout', {totalPrice: req.session.cart.totalPrice})
+})
+
+//  thank-you-page POST
+router.post('/thank-you-page', (req, res) => {
+  res.render('shop/thank-you')
 })
 
 module.exports = router

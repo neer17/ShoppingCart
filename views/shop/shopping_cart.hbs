@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="row">
+        {{# each cart.items}}
+        <div class="col col-md-6 offset-md-3 border border-secondary mb-1 mt-1"><strong>{{this.item.title }}</strong>
+            <button class="btn btn-success">{{this.item.price}}</button>
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">Dropdown</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+                <div role="separator" class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Separated link</a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+
+    <strong>Total Price: {{cart.totalPrice}}</strong>
+    <br>
+    <a href="/checkout" class="btn btn-success">Checkout</a>
+
+</div>

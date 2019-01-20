@@ -15,6 +15,9 @@ mongoose.connect('mongodb://localhost/shopping', {
   useNewUrlParser: true
 })
 
+// //  loading the product seeder
+// require('./seeders/product-seeder')
+
 //  loading the "index" route
 var indexRouter = require('./routes/index')
 var userRouter = require('./routes/user')
@@ -61,6 +64,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
   res.locals.isLoggedIn = req.isAuthenticated()
   res.locals.session = req.session
+
+  console.log(session)
   next()
 })
 
