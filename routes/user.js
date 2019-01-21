@@ -15,7 +15,7 @@ router.get('/profile', isLoggedIn,(req, res) => {
 	res.render('users/profile')
 })
 
-router.use(isLoggedOut)
+// router.use(isLoggedOut)
 
 //  on Request
 router.get('/signup', (req, res) => {
@@ -28,10 +28,17 @@ router.get('/signup', (req, res) => {
     body('email', 'Invalid email').exists().isEmail(),
     body('password', 'Password should be 6 characters long').exists().isLength({min: 6})
   ], passport.authenticate('local.signup', {
-    successRedirect: '/users/profile',
     failureRedirect: '/users/signup',
     failureFlash: true
-  }))
+  }), (req, res, next) => {
+    if (req.session.oldUrl) {
+      var oldUrl = req.session.oldUrl
+      req.session.oldUrl = null
+      res.redirect(oldUrl)
+    } else {
+      res.redirect('/users/profile')
+    }
+  })
   
   //  signin
   router.get('/signin', (req, res) => {
@@ -43,10 +50,18 @@ router.get('/signup', (req, res) => {
     body('email', 'Invalid email').exists().isEmail(),
     body('password', 'Password should be 6 characters long').exists()
   ], passport.authenticate('local.signin', {
-    successRedirect: '/users/profile',
     failureRedirect: '/users/signin',
     failureFlash: true
-	}))
+	}), (req, res, next) => {
+    if (req.session.oldUrl) {
+      var oldUrl = req.session.oldUrl
+      req.session.oldUrl = null
+      res.redirect(oldUrl)
+    } else {
+      res.redirect('/users/profile')
+    }
+    
+  })
 	
 	//	for logout
 	router.get('/logout', (req, res, next) => {
@@ -65,11 +80,11 @@ router.get('/signup', (req, res) => {
 
 	//  isLoggedOut
 	function isLoggedOut (req, res, next){
-		if (!req.isAuthenticated()) {
+		if (req.isAuthenticated()) {
 			return next()
 		}
 
-		res.redirect('/users/profile')
+		res.redirect('/users/signin')
 	}
 
   module.exports = router

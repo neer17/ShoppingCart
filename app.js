@@ -62,10 +62,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //  checking if the user is logged in
 //  storing session and logged in info in global variables
 app.use((req, res, next) => {
+  console.log('inside the middleware')
+  
   res.locals.isLoggedIn = req.isAuthenticated()
   res.locals.session = req.session
-
-  console.log(session)
   next()
 })
 
