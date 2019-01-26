@@ -1,10 +1,8 @@
-// import createError from 'http-errors'
 const createError = require('http-errors')
-// import express from 'express'
 const express = require('express')
 const session = require('express-session')
 const path = require('path')
-const cookieParser =require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const expressHbs = require('express-handlebars')
 const mongoose = require('mongoose')
@@ -23,11 +21,14 @@ const userRouter = require('./routes/user')
 //  getting the Passport Strategy
 const config = require('./config/passport-config')
 
+//  setting up the Mongo Store
 const MongoStore = connect_mongo(session)
 
+//  creating a new connection to the database
 mongoose.connect('mongodb://localhost/shopping', {
     useNewUrlParser: true
 })
+
 const app = express()
 
 // view engine setup
@@ -38,6 +39,7 @@ app.engine('.hbs', expressHbs({
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', '.hbs')
 
+//  middleware
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({
@@ -52,7 +54,7 @@ app.use(session({
     cookie: {
         maxAge: 180 * 60 * 1000
     },
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: new MongoStore({mongooseConnection: mongoose.connection})
 
 }))
 app.use(flash())
@@ -64,10 +66,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //  checking if the user is logged in
 //  storing session and logged in info in global variables
 app.use((req, res, next) => {
-    console.log('inside the middleware')
-
-    console.log(`inside app middleware req.session.cart ==> ${JSON.stringify(req.session.cart)}`)
-
     res.locals.isLoggedIn = req.isAuthenticated()
     res.locals.session = req.session
     next()

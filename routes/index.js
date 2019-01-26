@@ -1,11 +1,11 @@
-var express = require('express')
-var router = express.Router()
-var passport = require('passport')
-var stripe = require('stripe')('sk_test_cB3m5aqbUZZdP1FsgtVTQQo0')
+const express = require('express')
+const router = express.Router()
+const stripe = require('stripe')('sk_test_cB3m5aqbUZZdP1FsgtVTQQo0')
 
-var Product = require('./../models/product')
-var Cart = require('./../models/cart')
-var Order = require('./../models/orders')
+const Product = require('./../models/product')
+const Cart = require('./../models/cart')
+const Order = require('./../models/orders')
+
 
 //  middleware to render "thank-you-default-layout" as default layout for "thank-you" page
 router.all('shop/thank-you', (req, res, next) => {
@@ -13,24 +13,13 @@ router.all('shop/thank-you', (req, res, next) => {
     next()
 })
 
-/* home page. */
+//  GET /
 router.get('/', function (req, res, next) {
     Product.find((err, docs) => {
         if (err) {
             console.log(err)
             return
         }
-
-        /* console.log(`cart ==> ${req.session.cart}`)
-         console.log(`session ==> ${req.session}`)*/
-        // console.log(`session local ==> ${req.locals.session}`)
-
-        console.log(`req session ==> ${JSON.stringify(req.session.cart)}`)
-        // console.log(`res session ==>  ${JSON.stringify(res.locals.session.cart)}`)
-
-
-        // var flash = req.flash('empty cart')
-        // console.log(flash)
 
         res.render('shop/index', {
             title: 'Shopping Cart',
@@ -39,7 +28,7 @@ router.get('/', function (req, res, next) {
     })
 })
 
-//  add to cart route
+//  GET add-to-cart
 router.get('/add-to-cart/:id', (req, res) => {
     var id = req.params.id
 
@@ -60,14 +49,14 @@ router.get('/add-to-cart/:id', (req, res) => {
     })
 })
 
-//  shopping cart route
+//  GET shopping-cart
 router.get('/shopping-cart', (req, res, next) => {
     res.render('shop/shopping_cart', {
         cart: req.session.cart
     })
 })
 
-//  checkout route
+//  GET checkout
 router.get('/checkout', isLoggedIn, (req, res) => {
     if (!req.session.cart) {
         req.flash('empty cart', 'The cart is empty')
@@ -79,15 +68,16 @@ router.get('/checkout', isLoggedIn, (req, res) => {
     })
 })
 
-//  thank-you-page POST
+//  POST thank-you-page
 router.post('/thank-you-page', (req, res) => {
     console.log(`inside POST thank-you-page`)
 
     //  getting the "user" from "PassportJS"
-    var user = req.user
+    const user = req.user
 
     //  getting the cart
-    var cart = req.session.cart
+    const cart = req.session.cart
+    //  clearing the cart
     req.session.cart = null
 
     // Token is created using Checkout or Elements!
@@ -109,6 +99,7 @@ router.post('/thank-you-page', (req, res) => {
             paymentId: result.id
         })
 
+        //  saving the order in the database
         order.save().then((result) => {
             console.log(`cart in thank you page ==> ${JSON.stringify(req.session.cart)}`)
         }).catch((err) => {
@@ -122,13 +113,6 @@ router.post('/thank-you-page', (req, res) => {
     })
 })
 
-/*router.get('/thank-you-page', (req, res) => {
-    console.log(`inside GET thank-you-page`)
-    req.session.cart = null
-    res.send('GET thank-you-page')
-})*/
-
-/* END of POST thank-you-page */
 
 //  GET checkout/clear-cookie
 router.get('/checkout/clear-cookie', (req, res) => {
